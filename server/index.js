@@ -10,10 +10,21 @@ import interviewRouter from "./routes/interview.route.js"
 import paymentRouter from "./routes/payment.route.js"
 
 const app = express()
+const allowedOrigins = [
+  "http://localhost:3000",
+  "https://intervuary-frontend.onrender.com"
+];
+
 app.use(cors({
-    origin:"https://intervuary-frontend.onrender.com",
-    credentials:true
-}))
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  credentials: true
+}));
 
 app.use(express.json())
 app.use(cookieParser())
