@@ -9,28 +9,21 @@ export const analyzeResume = async (req, res) => {
     if (!req.file) {
       return res.status(400).json({ message: "Resume required" });
     }
-    const filepath = req.file.path
 
-    const fileBuffer = await fs.promises.readFile(filepath)
-    const uint8Array = new Uint8Array(fileBuffer)
+    const uint8Array = new Uint8Array(req.file.buffer);
 
     const pdf = await pdfjsLib.getDocument({ data: uint8Array }).promise;
 
     let resumeText = "";
 
-    // Extract text from all pages
     for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
       const page = await pdf.getPage(pageNum);
       const content = await page.getTextContent();
-
       const pageText = content.items.map(item => item.str).join(" ");
       resumeText += pageText + "\n";
     }
 
-
-    resumeText = resumeText
-      .replace(/\s+/g, " ")
-      .trim();
+    resumeText = resumeText.replace(/\s+/g, " ").trim();
 
     const messages = [
       {
@@ -54,13 +47,8 @@ Return strictly JSON:
       }
     ];
 
-
-    const aiResponse = await askAi(messages)
-
+    const aiResponse = await askAi(messages);
     const parsed = JSON.parse(aiResponse);
-
-    fs.unlinkSync(filepath)
-
 
     res.json({
       role: parsed.role,
@@ -71,16 +59,10 @@ Return strictly JSON:
     });
 
   } catch (error) {
-    console.error(error);
-
-    if (req.file && fs.existsSync(req.file.path)) {
-      fs.unlinkSync(req.file.path);
-    }
-
+    console.error("Resume analyze error:", error);
     return res.status(500).json({ message: error.message });
   }
 };
-
 
 export const generateQuestion = async (req, res) => {
   try {
