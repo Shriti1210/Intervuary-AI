@@ -11,7 +11,7 @@ import paymentRouter from "./routes/payment.route.js"
 
 const app = express()
 app.use(cors({
-    origin:"https://intervuary-backend.onrender.com",
+    origin:"https://intervuary-frontend.onrender.com",
     credentials:true
 }))
 
