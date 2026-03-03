@@ -11,7 +11,7 @@ import paymentRouter from "./routes/payment.route.js"
 
 const app = express()
 const allowedOrigins = [
-  "http://localhost:3000",
+  "http://localhost:8000",
   "https://intervuary-frontend.onrender.com"
 ];
 
