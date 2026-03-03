@@ -18,7 +18,7 @@ import Contact from './pages/Contact'
 import Legal from "./pages/Legal";
 
 
-export const ServerUrl  = "http://localhost:8000"
+export const ServerUrl  = "https://intervuary-backend.onrender.com";
 
 function App() {
 
